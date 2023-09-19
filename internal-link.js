@@ -2,6 +2,7 @@
 
 var internalLinks = {
   "guru": "/2023/09/guru.html",
+  "orang": "/2023/09/orang.html",
   "peserta didik": "/2023/09/peserta-didik.html",
   "transformasi ilmu": "/2023/09/transformasi-ilmu.html",
   // tambahkan lebih banyak kata kunci dan URL sesuai kebutuhan

@@ -12,12 +12,20 @@ var internalLinks = {
 };
 
 document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() {
   var articleContent = document.getElementById("post_body");
   if (articleContent) {
+    var linkedKeywords = {}; // Objek untuk melacak kata kunci yang telah diberi tautan
+
     for (var keyword in internalLinks) {
       if (internalLinks.hasOwnProperty(keyword)) {
         var regex = new RegExp("\\b" + keyword + "\\b", "g");
-        articleContent.innerHTML = articleContent.innerHTML.replace(regex, '<a href="' + internalLinks[keyword] + '">' + keyword + '</a>');
+
+        // Cek apakah kata kunci sudah memiliki tautan
+        if (!linkedKeywords[keyword]) {
+          articleContent.innerHTML = articleContent.innerHTML.replace(regex, '<a href="' + internalLinks[keyword] + '">' + keyword + '</a>');
+          linkedKeywords[keyword] = true; // Tandai kata kunci sebagai sudah diberi tautan
+        }
       }
     }
   }

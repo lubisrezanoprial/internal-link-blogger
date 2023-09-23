@@ -12,21 +12,43 @@ var internalLinks = {
 };
 
 document.addEventListener("DOMContentLoaded", function() {
-document.addEventListener("DOMContentLoaded", function() {
   var articleContent = document.getElementById("post_body");
   if (articleContent) {
-    var linkedKeywords = {}; // Objek untuk melacak kata kunci yang telah diberi tautan
+    var keywordsWithLinks = {}; // Objek untuk melacak kata kunci yang telah diberi tautan
+
+    var textNodes = getTextNodes(articleContent);
 
     for (var keyword in internalLinks) {
       if (internalLinks.hasOwnProperty(keyword)) {
         var regex = new RegExp("\\b" + keyword + "\\b", "g");
 
-        // Cek apakah kata kunci sudah memiliki tautan
-        if (!linkedKeywords[keyword]) {
-          articleContent.innerHTML = articleContent.innerHTML.replace(regex, '<a href="' + internalLinks[keyword] + '">' + keyword + '</a>');
-          linkedKeywords[keyword] = true; // Tandai kata kunci sebagai sudah diberi tautan
+        for (var i = 0; i < textNodes.length; i++) {
+          var node = textNodes[i];
+          var text = node.nodeValue;
+
+          // Cek apakah kata kunci sudah ada dalam atribut data-link
+          if (!keywordsWithLinks[keyword] && regex.test(text)) {
+            var replacedText = text.replace(regex, function(match) {
+              return '<a href="' + internalLinks[keyword] + '" data-link="true">' + match + '</a>';
+            });
+
+            node.nodeValue = replacedText;
+            keywordsWithLinks[keyword] = true; // Tandai kata kunci sebagai sudah diberi tautan
+          }
         }
       }
     }
   }
 });
+
+function getTextNodes(element) {
+  var textNodes = [];
+  var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+
+  while (walker.nextNode()) {
+    textNodes.push(walker.currentNode);
+  }
+
+  return textNodes;
+}
+

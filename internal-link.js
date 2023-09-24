@@ -1,5 +1,3 @@
-// auto-link.js
-
 var internalLinks = {
   "guru": "/2023/09/guru.html",
   "orang": "/2023/09/orang.html",
@@ -16,39 +14,20 @@ document.addEventListener("DOMContentLoaded", function() {
   if (articleContent) {
     var keywordsWithLinks = {}; // Objek untuk melacak kata kunci yang telah diberi tautan
 
-    var textNodes = getTextNodes(articleContent);
-
     for (var keyword in internalLinks) {
       if (internalLinks.hasOwnProperty(keyword)) {
         var regex = new RegExp("\\b" + keyword + "\\b", "g");
 
-        for (var i = 0; i < textNodes.length; i++) {
-          var node = textNodes[i];
-          var text = node.nodeValue;
-
+        articleContent.innerHTML = articleContent.innerHTML.replace(regex, function(match) {
           // Cek apakah kata kunci sudah ada dalam atribut data-link
-          if (!keywordsWithLinks[keyword] && regex.test(text)) {
-            var replacedText = text.replace(regex, function(match) {
-              return '<a href="' + internalLinks[keyword] + '" data-link="true">' + match + '</a>';
-            });
-
-            node.nodeValue = replacedText;
+          if (!keywordsWithLinks[keyword]) {
             keywordsWithLinks[keyword] = true; // Tandai kata kunci sebagai sudah diberi tautan
+            return '<a href="' + internalLinks[keyword] + '" data-link="true">' + match + '</a>';
+          } else {
+            return match; // Tidak ubah yang sudah memiliki tautan
           }
-        }
+        });
       }
     }
   }
 });
-
-function getTextNodes(element) {
-  var textNodes = [];
-  var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
-
-  while (walker.nextNode()) {
-    textNodes.push(walker.currentNode);
-  }
-
-  return textNodes;
-}
-

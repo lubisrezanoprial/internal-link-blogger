@@ -1,8 +1,8 @@
 // auto-link.js
 
 var internalLinks = {
-  "guru": "/2023/07/pengertian-guru.html",
-  "pendidikan": "/2023/05/pengertian-pendidikan.html",
+  "guru": "/2023/09/guru.html",
+  "pendidikan": "/2023/05/pendidikan.html",
   // tambahkan lebih banyak kata kunci dan URL sesuai kebutuhan
 };
 

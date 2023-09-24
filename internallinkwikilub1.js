@@ -8,6 +8,8 @@ var internalLinks = {
 
 document.addEventListener("DOMContentLoaded", function() {
   var articleContent = document.getElementById("post_body");
+  console.log(articleContent); // Tambahkan ini untuk memeriksa apakah artikel ditemukan
+
   if (articleContent) {
     var keywordsWithLinks = {}; // Objek untuk melacak kata kunci yang telah diberi tautan
 

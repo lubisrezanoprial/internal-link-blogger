@@ -1,50 +1,28 @@
-// auto-link.js
+// Daftar kata kunci dan URL
+  var keywords = {
+    "Pendidikan Nonformal": "/2023/10/pendidikan-non-formal.html",
+"Pendidikan Anak Usia Dini": "/2023/10/pendidikan-anak-usia-dini.html",
+"Guru": "/2023/09/guru.html",
+"Kepala Sekolah": "/2023/09/kepala-sekolah.html",
+"Pendidikan Kecakapan Hidup": "/2023/10/pendidikan-kecakapan-hidup.html",
 
-var internalLinks = {
-  "guru": "/2023/09/guru.html",
-  "pendidikan": "/2023/05/pendidikan.html",
-  // tambahkan lebih banyak kata kunci dan URL sesuai kebutuhan
-};
+    // Tambahkan lebih banyak kata kunci dan URL sesuai kebutuhan Anda
+  };
 
-document.addEventListener("DOMContentLoaded", function() {
-  var articleContent = document.getElementById("post_body");
-  console.log(articleContent); // Tambahkan ini untuk memeriksa apakah artikel ditemukan
+  // Fungsi untuk mengganti kata kunci dengan tautan
+  function replaceKeywords() {
+    var postContent = document.querySelectorAll(".post_body p, .post_body li"); // Sesuaikan dengan kelas yang sesuai di templat Anda
 
-  if (articleContent) {
-    var keywordsWithLinks = {}; // Objek untuk melacak kata kunci yang telah diberi tautan
-
-    var textNodes = getTextNodes(articleContent);
-
-    for (var keyword in internalLinks) {
-      if (internalLinks.hasOwnProperty(keyword)) {
-        var regex = new RegExp("\\b" + keyword + "\\b", "g");
-
-        for (var i = 0; i < textNodes.length; i++) {
-          var node = textNodes[i];
-          var text = node.nodeValue;
-
-          // Cek apakah kata kunci sudah ada dalam atribut data-link
-          if (!keywordsWithLinks[keyword] && regex.test(text)) {
-            var replacedText = text.replace(regex, function(match) {
-              keywordsWithLinks[keyword] = true; // Tandai kata kunci sebagai sudah diberi tautan
-              return '<a href="' + internalLinks[keyword] + '" data-link="true">' + match + '</a>';
-            });
-
-            node.nodeValue = replacedText;
-          }
-        }
+    for (var keyword in keywords) {
+      var regex = new RegExp(keyword, "g");
+      for (var i = 0; i < postContent.length; i++) {
+        var content = postContent[i].innerHTML;
+        var linkText = '<a href="' + keywords[keyword] + '" id="' + keyword + '">' + keyword + '</a>';
+        content = content.replace(regex, linkText);
+        postContent[i].innerHTML = content;
       }
     }
   }
-});
 
-function getTextNodes(element) {
-  var textNodes = [];
-  var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
-
-  while (walker.nextNode()) {
-    textNodes.push(walker.currentNode);
-  }
-
-  return textNodes;
-}
+  // Jalankan fungsi saat halaman dimuat
+  replaceKeywords();
